@@ -19,9 +19,7 @@ For our final data science project -but also to enable wider research into the m
 
 ### The repository
 
-In this repository you will find a [code](/code) folder, containing the R code we wrote for the project and the R Markdown source file we used to knit our report. Besides this readme, in the root directory you will also find the HTML report itself, whose rendered version can be accessed here.
-
-The report is a walkthrough of all the project's files and our analysis component. In it you will find detailed information regarding each component.
+In this repository you will find a [code](/code) folder, containing the R code we wrote for the project, the R Markdown source file we used to knit our report and the resulting HTML file. The rendered version of the report can be accessed here. Our report is a walkthrough of all the project's files and our analysis component. In it you will find detailed information regarding each component.
 
 ### About our scripts, commenting and documentation
 - A combination of regular argument passing to functions and piping is used
@@ -41,4 +39,3 @@ The material in this repository is work in progress and is hence private not lic
 
 ### Statement of contributions
 All contributors have participated in planning, designing, implementing and debugging the contents of this repository. Marco led the scpraping, Santiago the parsing and Gülce the analysis.
-
