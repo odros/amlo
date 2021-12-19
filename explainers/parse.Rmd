@@ -1,19 +1,17 @@
 ---
 title: "Parser walkthrough"
 subtitle: "A function to parse press conference transcrips"
-author: "Marco Schildt, Santiago Sordo, Gülce Sena Tuncer"
+author: "Marco Schildt, Gülce Sena Tuncer and Santiago Sordo"
 output: 
   html_document:
     toc: FALSE
     df_print: paged
     number_sections: FALSE
-    toc_float: true
-    css: custom.css 
-    self_contained: false
+    self_contained: TRUE
     code_folding: show
 ---
 
-With the transcripts scraped, the raw materials of any analysis of AMLO's press conferences have been obtained. However, the text files are still far from being analysable. The parser will produce a data frame containing every speakers turn and speech.
+With the transcripts scraped, the raw materials of any analysis of AMLO's press conferences have been obtained. However, the text files are still far from being analysable. The parser function will produce a data frame containing every speakers turn and speech.
 
 # The transcripts
 
