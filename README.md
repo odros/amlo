@@ -9,14 +9,11 @@ Every press conference is transcribed and published online in a blog-like fashio
 
 ## Proposal and objectives
 
-We propose to scrape, parse and explore AMLO's speeches. Hence, our proposal consists of three -two technical and one analytical- components:
+For our final data science project -but also to enable wider research into the conferences-, we propose to scrape all available conferences and parse them into a useful format. Additionally, in order to demonstrate the usability of the parsed conferences, we also propose to perform an analysis of the resulting corpus. Concretely, our proposal consists of three -two technical and one analytical- components:
 
-1.	Scrape: we will scrape all , parse them to detect the different participants and create a database with the resulting content.
-2.	A very simple package prototype that, in a similar fashion to the legislatoR package, is able to access the aforementioned database and provide the user with a selection of speeches based on criteria such as date and location.
-3.	A basic but hopefully meaningful analytical exploration of the corpus in order to provide some insights into the role that civil society actors play in the speeches. We propose to use quanteda to achieve this.
-![image](https://user-images.githubusercontent.com/44981224/146664337-b5e5123a-9e85-4aad-9f72-06f0c65dad20.png)
-
-
+1.	Scraping: we will scrape all available press conferences and store them as text files.
+2.	Parsing: we will parse the conferences to produce data frames containing speaker and speech.
+3.	Analyzing: we will perform a thematic exploration of the corpus to gain insights into the role that the covid pandemic has played in the conferences.
 
 ### About our scripts, commenting and documentation
 - A combination of regular argument passing to functions and piping is used
