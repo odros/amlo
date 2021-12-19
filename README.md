@@ -7,7 +7,7 @@ This repository contains the code and documentation for the final project of the
 
 Assuming office on 1 December 2018, the incumbent Mexican president, Andrés Manuel López Obrador (AMLO), is known for his _daily_ early morning press conferences. In them, he discusses his administration’s policies, current events and the country’s state of affairs. The conferences have garnered a lot of attention from researchers, journalists and students, and there is a lot of interest in performing all sorts of analyses around them.
 
-Every press conference is transcribed and published online in a blog-like fashion. In order to enable the aforementioned analyses -our own and those of any other interested party-, collecting them as text files is a necessary first step. To further facilitate analysis, a basic parsing of the press conferences in order to detect speakers and remarks would also be required.
+Every press conference is transcribed and published online in a blog-like fashion; [this](https://lopezobrador.org.mx) is one of the sites where they are published. In order to enable the aforementioned analyses -our own and those of any other interested party-, collecting them as text files is a necessary first step. To further facilitate analysis, a basic parsing of the press conferences in order to detect speakers and remarks would also be required.
 
 ### Proposal and objectives
 
