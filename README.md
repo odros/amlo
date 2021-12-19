@@ -3,4 +3,5 @@
 
 
 ### About our scripts, commenting and documentation
-All the functions used in our scripts will be explicit about the package they come from, unless they come from `base`
+- A combination of regular argument passing to functions and piping is used
+- All the functions used in our scripts will be explicit about the package they come from, unless they come from `base`
