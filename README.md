@@ -17,15 +17,14 @@ For our final data science project -but also to enable wider research into the m
 2.	Parsing: we will parse the conferences to produce data frames containing speaker and speech.
 3.	Analysis: we will perform a thematic exploration of the corpus to gain insights into the role that the covid pandemic has played in the conferences.
 
-### The repository
+### Our work and the repository
+
+To develop the project, we have created a parsing function that can be called by a scraper sript. The scraper script then obtains every available press conference transcript and downloads it into a text file. To document our project and provide a report, we have created two explainers that walk you through our parser function, our scraper script
 
 In this repository you will find a [files](/files) folder, containing the R code we wrote for the project and an [explainers](/explainers) folder containing the R Markdown source files we used to knit walk-throughs -detailed explanations regarding each component- for each file, our analysis and the resulting HTML files. Our project report is hence made up of o separate explainers for simplicity and readability. The analisys The rendered HTMLs for the explainers can be accessed here:
-- [`parse.R`](https://raw.githack.com/odros/amlo/main/explainers/parse.html)
-- [Analysis](https://raw.githack.com/odros/amlo/main/explainers/analysis.html)
-
-### About our scripts, commenting and documentation
-- A combination of regular argument passing to functions and piping is used
-- All the functions used in our scripts will be explicit about the package they come from, unless they come from `base`
+- [1. Scraping]
+- [2. Parsing](https://raw.githack.com/odros/amlo/main/explainers/parse.html)
+- [3. nalysis](https://raw.githack.com/odros/amlo/main/explainers/analysis.html)
 
 ### License
 The material in this repository is work in progress and is hence private and not licensed.
