@@ -15,6 +15,10 @@ For our final data science project -but also to enable wider research into the c
 2.	Parsing: we will parse the conferences to produce data frames containing speaker and speech.
 3.	Analyzing: we will perform a thematic exploration of the corpus to gain insights into the role that the covid pandemic has played in the conferences.
 
+## The repository
+
+In this repository you will find
+
 ### About our scripts, commenting and documentation
 - A combination of regular argument passing to functions and piping is used
 - All the functions used in our scripts will be explicit about the package they come from, unless they come from `base`
@@ -22,3 +26,15 @@ For our final data science project -but also to enable wider research into the c
 ### Pending issues
 - Specify package of origin for every function
 - Properly comment every non-self-explanatory line of code
+
+## Contributors
+- Marco Schildt (GitHub)
+- Santiago Sordo (GitHub)
+- Gülce Sena Tuncer
+
+## License
+The material in this repository is work in progress and is hence not licensed and private.
+
+## Statement of contributions
+All contributors have participated in planning, designing and implementing the contents of this repository.
+
