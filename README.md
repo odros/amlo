@@ -36,4 +36,4 @@ The material in this repository is work in progress and is hence private not lic
 - Santiago Sordo (odros@hotmail.com)
 
 ### Statement of contributions
-All contributors have equally participated in planning, designing, implementing and debugging the contents of this repository.
+All contributors have equally participated in planning, designing, implementing and debugging the contents of this repository and the repository itself.
