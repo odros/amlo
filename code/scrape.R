@@ -54,14 +54,14 @@ for (i in 1:length(url))
     date <- html_text(parsed_date)%>%
       parse_date("%B %d, %Y", locale = locale("es"))
     
-    if (speech_nr(url[i]) == seq[i]){
-      
-      if (!file.exists(paste0(folder,date," no. ", seq[i]))) {
-        
+    if (speech_nr(url[i]) == seq[i])
+    {
+      if (!file.exists(paste0(folder,date," no. ", seq[i])))
+      {
         write(speech, file = paste0(folder,date," no. ", seq[i],".txt"))
       }
     }
   }
-  # timer (still needs to be set)  
+  # A timer for polite scrping (still needs to be set)  
   Sys.sleep(runif(1, 1, 2)) 
 }
