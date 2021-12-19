@@ -8,3 +8,4 @@ This repository contains the code and documentation for the final project of the
 
 ### Pending issues
 - Specify package of origin for every function
+- Properly comment every non-self-explanatory line of code
