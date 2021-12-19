@@ -1,0 +1,107 @@
+---
+title: "Parser walkthrough"
+subtitle: "A function to parse press conference transcrips"
+author: "Marco Schildt, Santiago Sordo, Gülce Sena Tuncer"
+output: 
+  html_document:
+    toc: FALSE
+    df_print: paged
+    number_sections: FALSE
+    toc_float: true
+    css: custom.css 
+    self_contained: false
+    code_folding: show
+---
+
+With the transcripts scraped, the raw materials of any analysis of AMLO's press conferences have been obtained. However, the text files are still far from being analysable. The parser will produce a data frame containing every speakers turn and speech.
+
+# The transcripts
+
+The conference transcripts are made up of the following components
+* A header: this chunk's format is almost always present and has many variations. Sometimes it includes date and location, sometimes there is a narrator style
+* The "speech": the actual remarks by each of the conference's participants. This is always in the same "SPEAKER: speech" format, meaning the speaker is always reported in all caps followed by a colon. This is is crucial, as it is -fortunately- particular enough to allow for unequivocal parsing. Most government officials are identified by name and position. Other participants get generic labels, which, unfortunately makes more granular parsing difficult.
+* A footer: after the last speaker has spoken, typically AMLO himself, a section with an end-of-transcript character and copyright information follows and closes the document.
+
+While the header and footer could be considered useful, the parser will focus on the speech components. The plan is to extract the components and collect them in a data frame with three columns: turn, speaker and speech. This will allow any researcher to perform a diverse host of analyses.
+
+# The code
+
+While the repo contains a function version of the parser, this walk through will treat it as a script in order to do a step by step explanation of its contents.
+
+First we read the transcript we want to parse, we'll use the one corresponding to March 9, 2020 as an example; the file is <a href = "https://github.com/odros/amlo/blob/main/files/sample_transcript.txt">here</a> in the repo. In order to read the text file into a single string, we do the following:
+```{r}
+# For ease, this solution uses the 'stringr' package
+library(stringr)
+# Read all characters in the file and save
+file <- "speeches/2020-03-09 no. 272.txt"
+document <- readChar(file, file.info(file)$size)
+# Read a sample to discuss
+sample <- readChar(file, 1000)
+sample
+```
+As you can see from the sample, the first speaker is the president and then it's some government official's turn. Both speakers are specified using the aforementioned "SPEAKER:" format. The most challenging aspect of the parser was coming up with a regular expression that was able to identify these speaker tags. While this may seem relatively straightforward, the present of special characters, commas and spaces required a long trial and error process to arrive at an expression that worked in all the cases we encountered. In the end we were able to achieve the capture by using the following regular expression:
+
+```{r}
+pattern <- regex("([A-ZÀ-Ú][ ,\\-A-ZÀ-Ú][ ,(A-ZÀ-Ú)]+): *")
+head(str_extract_all(document, pattern)[[1]], 10)
+```
+As you can see, we have successfully -albeit with some noise- extracted the desired speaker tags. Surely, this expression is not the simplest one that can capture what we need, but we will keep it as is since it works. A lesson learned here is that regular expressions are a world in themselves.
+
+The next step will be to break the speech component into its speaker and speeches. Note that here "speech" means what was spoken by each speaker in their respective turn. The strategy will be to pad each speaker tag with special delimiter characters that we can later use to break the strings down. We initially chose characters that would not occur in the transcripts: '#' and '&'. As it turned out, sometimes '#' does appear as part of a speech itself, so we used repetitions of these characters: 
+```{r}
+# Prep the document by adding separator characters between the relevant parts: speaker and speech
+prepped_document <- str_replace_all(document, pattern, "##\\1&&")
+substr(prepped_document, 1, 200)
+```
+
+As you can see, the speaker tags are now padded. From here, we first need to extract every turn -every instance of a speaker speaking- by splitting the parsed document used our left padding character "#". We will only be showing the first speaker's turn because their remarks are quite long:
+
+```{r}
+# Parse each turn by splitting the speech into speaker-speech elements 
+parsed_turns <- unlist(str_split(prepped_document, "##"))
+
+# Leave non-speech elements outside (line 1)
+parsed_turns <- parsed_turns[2:length(parsed_turns)]
+parsed_turns[1]
+```
+As you can see, the first element of the parsed turns corresponds to the first speaker-speech pair and the "&&" delimiter is there between both components. We have skipped the first line, as it corresponds to the transcripts header. We now just have to split each turn into speaker and speech using this delimiter. To do this, we will store each turn into a data frame:
+
+```{r}
+turns <- data.frame(matrix(NA, nrow = length(parsed_turns), ncol = 3))
+colnames(turns) <- c("turn", "speaker", "speech")
+
+# Populate the data frame with the turns: separated and white space-trimmed speaker and speech
+for(i in 1:length(parsed_turns))
+{
+  turns$turn[i] <- i
+  turns$speaker[i] <- str_trim(unlist(str_split(parsed_turns[i], "&&"))[1], side = "both")
+  turns$speech[i] <- str_trim(unlist(str_split(parsed_turns[i], "&&"))[2], side = "both")
+}
+head(turns, 3)
+```
+
+As you can see, we have arrived at the desired table with a turn, speaker and speech structure. We have done some white space removal in the loop to take advantage of the iteration. Now all is left to do is removing the footer and some formatting: 
+
+```{r}
+turns$speech[length(parsed_turns)]
+```
+The last turn includes the footer, which we should remove. To achieve this and format the speaker tags, we do the following:
+```{r}
+# Remove non-speech components (those after the "[+++++]" string or "©" symbol)
+if(grepl("[+++++]", turns$speech[length(parsed_turns)]) == TRUE)
+{
+  turns$speech[length(parsed_turns)] <- unlist(str_split(turns$speech[length(parsed_turns)], "[+++++]"))[1]
+} else
+{
+  turns$speech[length(parsed_turns)] <- unlist(str_split(turns$speech[length(parsed_turns)], "©"))[1]
+}
+# This is almost consistent, as sometimes other strings (like "[– – – 0- – –]") are used
+
+# Convert all speakers to title case
+turns$speaker <- str_to_title(turns$speaker, locale = "es")
+# Some words should not be capitalized. May fix this to make more aesthetically appealing.
+turns$speech[length(parsed_turns)]
+head(turns, 3)
+```
+As you can see, the last turn is now without the footer and every speaker tag is formatted. The parser function takes a raw transcription in text form and converts it into a usable data frame with one row per turn!
+<br>
