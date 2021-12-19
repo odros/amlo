@@ -1,5 +1,5 @@
 # amlo
- Introduction to Data Science
+This repository contains the code and documentation for the final project of the Introduction to Data Science course of Hertie School's Master of Data Science for Public Policy program.
 
 
 ### About our scripts, commenting and documentation
