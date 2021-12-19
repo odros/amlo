@@ -19,16 +19,12 @@ For our final data science project -but also to enable wider research into the m
 
 ### The repository
 
-In this repository you will find a [files](/files) folder, containing the R code we wrote for the project and a [explainers](/explainers) containing the R Markdown source files we used to knit walkthroughs -detailed information regarding each component- for each file, our analysis and the resulting HTML files. The rendered HTMLs can be accessed here_
-- ['parse.R']
+In this repository you will find a [files](/files) folder, containing the R code we wrote for the project and a [explainers](/explainers) containing the R Markdown source files we used to knit walkthroughs -detailed information regarding each component- for each file, our analysis and the resulting HTML files. The rendered HTMLs can be accessed here:
+- ['parse.R'](
 
 ### About our scripts, commenting and documentation
 - A combination of regular argument passing to functions and piping is used
 - All the functions used in our scripts will be explicit about the package they come from, unless they come from `base`
-
-### Pending issues
-- Specify package of origin for every function
-- Properly comment every non-self-explanatory line of code
 
 ### License
 The material in this repository is work in progress and is hence private not licensed.
