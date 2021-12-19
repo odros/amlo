@@ -19,7 +19,7 @@ For our final data science project -but also to enable wider research into the m
 
 ### The repository
 
-In this repository you will find a [files](/files) folder, containing the R code we wrote for the project and a [explainers](/explainers) containing the R Markdown source files we used to knit walkthroughs -detailed information regarding each component- for each file, our analysis and the resulting HTML files. We chose to do separate explainers for simplicity and readability. The rendered HTMLs can be accessed here:
+In this repository you will find a [files](/files) folder, containing the R code we wrote for the project and an [explainers](/explainers) folderr containing the R Markdown source files we used to knit walkthroughs -detailed information regarding each component- for each file, our analysis and the resulting HTML files. We chose to do separate explainers for simplicity and readability. The rendered HTMLs can be accessed here:
 - [`parse.R`](https://raw.githack.com/odros/amlo/main/explainers/parse.html)
 - The rest
 
