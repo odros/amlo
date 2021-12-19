@@ -19,7 +19,8 @@ For our final data science project -but also to enable wider research into the m
 
 ### The repository
 
-In this repository you will find a [files](/files) folder, containing the R code we wrote for the project, the R Markdown source file we used to knit our report and the resulting HTML file. The rendered version of the report can be accessed here. Our report is a walkthrough of all the project's files and our analysis component. In it you will find detailed information regarding each component.
+In this repository you will find a [files](/files) folder, containing the R code we wrote for the project and a [explainers](/explainers) containing the R Markdown source files we used to knit walkthroughs -detailed information regarding each component- for each file, our analysis and the resulting HTML files. The rendered HTMLs can be accessed here_
+- ['parse.R']
 
 ### About our scripts, commenting and documentation
 - A combination of regular argument passing to functions and piping is used
