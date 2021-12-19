@@ -28,7 +28,7 @@ In this repository you will find a [files](/files) folder, containing the R code
 - All the functions used in our scripts will be explicit about the package they come from, unless they come from `base`
 
 ### License
-The material in this repository is work in progress and is hence private not licensed.
+The material in this repository is work in progress and is hence private and not licensed.
 
 ### Contributors
 - Marco Schildt (mschildt@icloud.com)
