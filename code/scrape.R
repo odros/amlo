@@ -1,96 +1,60 @@
-Skip to content
-Search or jump to…
-Pulls
-Issues
-Marketplace
-Explore
- 
-@odros 
-m-schildt
-/
-AMLO-speeches
-Public
-Code
-Issues
-Pull requests
-Actions
-Projects
-Wiki
-Security
-Insights
-AMLO-speeches/scraper.R
-@m-schildt
-m-schildt scripts
-Latest commit 234c09a 2 days ago
- History
- 1 contributor
-79 lines (50 sloc)  2.03 KB
-   
+### This script scrapes press conference transcriptions from a website
+
+## HTML and XML manipulation
 library(rvest)
+# Wrappers for package 'stringi', string, text and NLP tools
 library(stringr)
+# Parsing flat files into tibbles
 library(readr)
+# Tools for working with HTTP
+library(httr)
 
-
-# create sequence
-seq <- seq(1,700,1) # here we can set the nr. of speeches
-
-
-
-# create list with URLs
+# Create press conference URLs; currently less than 700, this number grows with time.
 base_url <- "https://lopezobrador.org.mx/version-estenografica-de-la-conferencia-de-prensa-matutina-del-presidente-andres-manuel-lopez-obrador-"
-url <- paste0(base_url,seq, "/")
+url <- paste0(base_url, 1:700, "/")
 
-
-##############################################################
-
-## Function to validate search URL
-#The validate returns true, when the requested website exists and has the title "Versión estenográfica" and "prensa matutina".
-#Otherwise it returns a false
-validate <- function(url) {
-  
+## Helper funtion #1: validate URL
+# The function returns TRUE only when the requested file exists and has the title "Versión estenográfica" and "prensa matutina".
+# The key attribute here
+validate <- function(url)
+{
   page_title <- ""
-  try({
+  try
+  {
     page_url <- read_html(url)
     node <- html_nodes(page_url, xpath = '/html/body/div[3]/div/div/div[1]/div/article/h1')
     page_title <- html_text(node)
-  })
-  
-  return(page_title == "Versión estenográfica de la conferencia de prensa matutina del presidente Andrés Manuel López Obrador" )
-  
+  }
+  return(page_title == "Versión estenográfica de la conferencia de prensa matutina del presidente Andrés Manuel López Obrador")
 }
 
-##############################################################
-
-## Function returns number of redirected URL
-speech_nr <- function(url) {
+## Helper funtion #2: return number of redirected URL
+speech_nr <- function(url)
+{
   redirected <- httr::GET(url)[["url"]]
   step1 <- sub(".*-", "", redirected)
-  step2 <- sub("/$","", step1)
+  step2 <- sub("/$", "", step1)
   return(step2)
 }
 
+## Code to scrape speeches and store them in text files
 
-##############################################################
-
-## Code to scrape speeches and store them in .txt files
-
-
+# I'd suggest using small caps
 folder <- "Data/raw/"
 dir.create(folder)
 
-
-for (i in 1:length(url)) {
-  
-  if(validate(url[i])){
+for (i in 1:length(url))
+{
+  if(validate(url[i]))
+  {
     speech_url <- read_html(url[i])
     parsed_speech <- html_nodes(speech_url, xpath = '//p')
     parsed_date <- html_nodes(speech_url, xpath = '//*[contains(concat( " ", @class, " " ), concat( " ", "entry-date", " " ))]')
-    
     speech <- html_text(parsed_speech)
     date <- html_text(parsed_date)%>%
       parse_date("%B %d, %Y", locale = locale("es"))
     
-    if (speech_nr(url[i]) == seq[i] ){
+    if (speech_nr(url[i]) == seq[i]){
       
       if (!file.exists(paste0(folder,date," no. ", seq[i]))) {
         
@@ -101,20 +65,3 @@ for (i in 1:length(url)) {
   # timer (still needs to be set)  
   Sys.sleep(runif(1, 1, 2)) 
 }
-
-
-
-
-© 2021 GitHub, Inc.
-Terms
-Privacy
-Security
-Status
-Docs
-Contact GitHub
-Pricing
-API
-Training
-Blog
-About
-Loading complete
