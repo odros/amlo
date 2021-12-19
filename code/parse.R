@@ -1,4 +1,5 @@
-# This function parses a speech contained in a TXT file
+### This function parses a speech contained in a TXT file
+
 parse <- function(file)
 {
   # The solution uses the 'stringr' package
@@ -34,7 +35,8 @@ parse <- function(file)
     turns$speech[i] <- str_trim(unlist(str_split(parsed_turns[i], "&&"))[2], side = "both")
   }
   
-  # Remove non-speech components (those after the "[+++++]" string or "©" symbol)
+# Remove non-speech components: the last line of every transcripion always includes some end-of-document symbol or information. This version takes care of information after the "+++++" string or "©" symbol. This is almost consistent, sometimes other strings (like "– – – 0- – –") are used.
+  
   if(grepl("[+++++]", turns$speech[length(parsed_turns)]) == TRUE)
   {
     turns$speech[length(parsed_turns)] <- unlist(str_split(turns$speech[length(parsed_turns)], "[+++++]"))[1]
@@ -42,7 +44,7 @@ parse <- function(file)
   {
     turns$speech[length(parsed_turns)] <- unlist(str_split(turns$speech[length(parsed_turns)], "©"))[1]
   }
-  # This is almost consistent, as sometimes other strings (like "[– – – 0- – –]") are used
+  
   
   # Convert all speakers to title case
   turns$speaker <- str_to_title(turns$speaker, locale = "es")
