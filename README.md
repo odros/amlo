@@ -24,7 +24,7 @@ To develop the project, we have created a parsing function that can be called by
 In this repository you will find a [files](/files) folder, containing the R code we wrote for the project and an [explainers](/explainers) folder containing the R Markdown source files we used to knit walk-throughs -detailed explanations regarding each component- for each file, our analysis and the resulting HTML files. Our project report is hence made up of o separate explainers for simplicity and readability. The analisys The rendered HTMLs for the explainers can be accessed here:
 - [1. Scraping]
 - [2. Parsing](https://raw.githack.com/odros/amlo/main/explainers/parse.html)
-- [3. nalysis](https://raw.githack.com/odros/amlo/main/explainers/analysis.html)
+- [3. Analysis](https://raw.githack.com/odros/amlo/main/explainers/analysis.html)
 
 ### License
 The material in this repository is work in progress and is hence private and not licensed.
