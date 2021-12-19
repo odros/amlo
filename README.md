@@ -9,7 +9,7 @@ Assuming office on 1 December 2018, the incumbent Mexican president, Andrés Man
 
 Every press conference is transcribed and published online in a blog-like fashion; [this](https://lopezobrador.org.mx) is one of the sites where they are published. In order to enable the aforementioned analyses -our own and those of any other interested party-, collecting them as text files is a necessary first step. To further facilitate analysis, a basic parsing of the press conferences in order to detect speakers and remarks would also be required.
 
-### Proposal and objectives
+### Proposal
 
 For our final data science project -but also to enable wider research into the conferences-, we propose to scrape all available conferences and parse them into a useful format. Additionally, in order to demonstrate the usability of the parsed conferences, we also propose to perform an analysis of the resulting corpus. Concretely, our proposal consists of three -two technical and one analytical- components:
 
@@ -19,7 +19,7 @@ For our final data science project -but also to enable wider research into the c
 
 ### The repository
 
-In this repository you will find
+In this repository you will find a [code](/code) folder, containing the R code we wrote for the project and the R Markdown source file we used to knit our report. 
 
 ### About our scripts, commenting and documentation
 - A combination of regular argument passing to functions and piping is used
@@ -30,13 +30,13 @@ In this repository you will find
 - Properly comment every non-self-explanatory line of code
 
 ### Contributors
-- Marco Schildt (GitHub)
-- Santiago Sordo (GitHub)
-- Gülce Sena Tuncer
+- Marco Schildt (mschildt@icloud.com)
+- Gülce Sena Tuncer (gulcesenatuncer@gmail.com)
+- Santiago Sordo (odros@hotmail.com)
 
 ### License
 The material in this repository is work in progress and is hence not licensed and private.
 
 ### Statement of contributions
-All contributors have participated in planning, designing and implementing the contents of this repository.
+All contributors have participated in planning, designing, implementing and debugging the contents of this repository. Marco led the scpraping, Santiago the parsing and Gülce the analysis.
 
