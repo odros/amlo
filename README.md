@@ -1,5 +1,7 @@
-# amlo: scraping, parsing and exploring press conferences
-## 
+# amlo
+## Scraping, parsing and exploring the Mexican president's daily press conferences
+
+
 This repository contains the code and documentation for the final project of the Fall 2021 Introduction to Data Science course of Hertie School's Master of Data Science for Public Policy program.
 
 ### Context
