@@ -22,7 +22,7 @@ For our final data science project -but also to enable wider research into the m
 To develop the project, we have created a parsing function that can be called by a scraper sript. The scraper script then obtains every available press conference transcript and downloads it into a text file. To document the project and provide a report, we have created  explainers that walk you through our parser function, our scraper script and a helper aggregator function. Finally, a comprehensive walk-through of our analysis is also provided.
 
 In this repository you will find a [files](/files) folder, containing the R code we wrote for the project and any helper files (like a sample text file containing a transcript or the script we ran to process all transcripts) and an [explainers](/explainers) folder containing the R Markdown source files we used to knit walk-throughs -detailed explanations regarding each component- for each file, our analysis and the resulting HTML files. __*Our project report is hence made up of four separate explainers for simplicity and readability*__. The rendered HTMLs for the explainers can be accessed here:
-- [1. Scraping]
+- [1. Scraping](https://raw.githack.com/odros/amlo/main/explainers/scrape.html)
 - [2. Parsing](https://raw.githack.com/odros/amlo/main/explainers/parse.html)
 - [2.5 Aggregating](https://raw.githack.com/odros/amlo/main/explainers/aggregate.html)
 - [3. Analysis](https://raw.githack.com/odros/amlo/main/explainers/analysis.html)
