@@ -1,9 +1,10 @@
 ### This function aggregates a speech contained in a CSV file and returns a data frame
+library(dplyr)
 
 aggregate <- function(file)
 {
   # Extract date from file name
-  date <- substring(file, 13,22)
+  date <- stringr::str_sub(file, - 14, - 5)
   try
   { 
     parsed_speech <- read.csv(file = file, header = TRUE) %>%

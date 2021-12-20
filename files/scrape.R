@@ -19,7 +19,7 @@ folder <- "data/raw/"
 dir.create(folder)
 
 # Create press conference URLs; as of 12.2021 less than 700 speeches exist.
-seq <- seq(40,44,1) # here we can set the number of speeches
+seq <- seq(1,700) # here we can set the number of speeches
 base_url <- "https://lopezobrador.org.mx/version-estenografica-de-la-conferencia-de-prensa-matutina-del-presidente-andres-manuel-lopez-obrador-"
 url_list <- paste0(base_url, seq, "/")
 
@@ -44,7 +44,7 @@ validate <- function(speech_url)
 
 
 
-## Helper funtion #2: return speech number of redirected URL
+## Helper function #2: returns speech number of redirected URL
 #
 speech_nr <- function(url)
 {

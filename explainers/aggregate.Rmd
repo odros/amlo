@@ -1,0 +1,64 @@
+---
+title: "Aggregator walkthrough"
+subtitle: "A function to aggregate press conference transcrips"
+author: "Marco Schildt, Gülce Sena Tuncer and Santiago Sordo"
+output: 
+  html_document:
+    toc: FALSE
+    df_print: paged
+    number_sections: FALSE
+    self_contained: TRUE
+    code_folding: show
+---
+
+With the transcripts scraped and parsed the data is obtained and tidied. For the scope of our analysis further data transformation is required. 
+The transcript files still contain the turns for each speaker.
+The aggregate function will produce a single data frame containing only one aggregated text for each speakers every day.
+
+
+# The code
+
+
+```{r include = FALSE}
+library(dplyr)
+```
+
+While the repo contains a function version of the aggregator, this walk through will provide explanation of main contents.
+
+First, the function extracts the date from the files path to the parsed speech.
+Example:
+```{r}
+sample_filename<-"parsed/2018-12-13.csv"
+
+date <- stringr::str_sub(sample_filename, - 14, - 5)  
+
+date
+```
+
+
+
+
+Next, the function loads the parsed speech from an CSV file. This step will be skipped by loading the example from the parse.Rmd and parsing it directly 
+```{r}
+source("../files/parse.R")
+sample_file <- "../files/sample_transcript.txt"
+
+speech <- parse(sample_file) 
+
+head(speech)
+```
+
+
+The main step of the function involves grouping the the data frame by speaker and then summarizing the speech (from each turn). This is done by using collapse in combination with group_by and summarize. Additionally, the previously extracted date will be placed into the first column.
+```{r}
+aggr_speech <- speech %>%
+  group_by(speaker) %>% 
+  summarize(speech = paste(speech, collapse = " \n ")) %>% # combine text of each speaker 
+  mutate(Date = date, .before = speaker)
+
+head(aggr_speech)
+```
+
+
+In the end the function will return the data frame
+<br>
