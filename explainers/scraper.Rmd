@@ -1,0 +1,237 @@
+---
+title: "Scraper walkthrough"
+subtitle: "Scraper for press conference transcrips"
+author: "Marco Schildt, Gülce Sena Tuncer and Santiago Sordo"
+output: 
+  html_document:
+    toc: FALSE
+    df_print: paged
+    number_sections: FALSE
+    self_contained: TRUE
+    code_folding: show
+---
+
+
+# The target website
+
+The all the transcripts of the speeches are [lopezobrador.org.mx](https://lopezobrador.org.mx ). The website has daily updates about Mexico's president.
+Our project is only interested in the morning speeches - "Versión estenográfica de la conferencia de prensa matutina"
+The URL of a moring speech
+
+
+
+Observation:
+- There is never more than one morning speech for a date.
+- Not for every date there is a morning speech. For example on weekends. 
+- The speech have continuous numbers. However, some numbers might be missing. For example there no number 1 speech.
+
+
+# The concept of the scraper
+
+The scraper is designed to exploit the fact the server is redirecting requests that only contain the number of the speech to the correct address. 
+
+For example this request:
+https://lopezobrador.org.mx/version-estenografica-de-la-conferencia-de-prensa-matutina-del-presidente-andres-manuel-lopez-obrador-**644**
+Is redirected to:
+https://lopezobrador.org.mx**/2021/12/02/**version-estenografica-de-la-conferencia-de-prensa-matutina-del-presidente-andres-manuel-lopez-obrador-**644**/
+
+Notice: The speech number says the same, but the redirected link has also the date of the speech.
+
+However, if there is no speech for the requested speech number, the server will redirect the request to another speech.
+For example a request with number 1:
+https://lopezobrador.org.mx/version-estenografica-de-la-conferencia-de-prensa-matutina-del-presidente-andres-manuel-lopez-obrador-**1**
+Is redirected to speech 10:
+https://lopezobrador.org.mx/2018/12/24/version-estenografica-de-la-conferencia-de-prensa-matutina-del-presidente-andres-manuel-lopez-obrador-**10**/
+This happens because there is no number 1 speech 
+
+Therefore, the scraper has 2 control mechanisms to ensure that only the right speeds are scraped. 
+
+1 control mechanism
+The redirected url will be compared with the speech number of the original request. This ensures that no unintended speeches get scraped.
+
+2 control mechanism 
+The title of the scraped speech will be analyzed to confirm that the webpage actually contains a morning speech.
+
+Only if both controls are passed the speech will scraped and further processed.
+
+
+
+
+
+# Preparations
+
+## HTML and XML manipulation
+library(rvest)
+# Wrappers for package 'stringi', string, text and NLP tools
+library(stringr)
+# Parsing flat files into tibbles
+library(readr)
+# Tools for working with HTTP
+library(httr)
+
+
+```{r}
+## HTML and XML manipulation
+library(rvest)
+# Wrappers for package 'stringi', string, text and NLP tools
+library(stringr)
+# Parsing flat files into tibbles
+library(readr)
+# Tools for working with HTTP
+library(httr)
+```
+
+
+
+
+We created a header to stay identifiable. The header is refering to our repo
+```{r}
+headers = add_headers(`From` = "https://github.com/odros/amlo", `UserAgent` = R.Version()$version.string)
+```
+
+
+
+
+ We also create a folder to store scraped speeches later
+```{r}
+folder <- "../files/scraped"
+dir.create(folder)
+```
+
+
+Then we create a sequence for the number of speeches that we like to scrape. This seq variable will store the number of speeches that should be scraped. 
+The scraping doesn’t need to start at number 1. 
+```{r}
+seq <- seq(600,602) # here we can set the number of speeches
+```
+
+
+With the sequence we build URLs to access press conference URLs
+```{r}
+base_url <- "https://lopezobrador.org.mx/version-estenografica-de-la-conferencia-de-prensa-matutina-del-presidente-andres-manuel-lopez-obrador-"
+
+url_list <- paste0(base_url, seq, "/")
+
+head(url_list)
+```
+
+# Control functions
+
+
+## 1 control mechanism: validate speech number of the redirected url
+
+The speech_nr is destined to verify if the redirected url is the desired url.
+The is achieved by a simple get request. The url of the redirected webpage will be extracted with [["url"]] and stored in variable. In step 1 and the step 2 we extract the  the speech number from the url. In the end the functoin will just return a number. 
+```{r}
+speech_nr <- function(url)
+{
+  redirected <- httr::GET(url, headers)[["url"]]
+  step1 <- sub(".*-", "", redirected)
+  step2 <- sub("/$", "", step1)
+  return(step2)
+}
+```
+
+Example with speech 1 (which is not existing)
+We can see that server redirects the request to speech 10
+```{r}
+speech_nr("https://lopezobrador.org.mx/version-estenografica-de-la-conferencia-de-prensa-matutina-del-presidente-andres-manuel-lopez-obrador-1/")
+```
+But, the redirection of a request for speech 10 works as planned
+```{r}
+speech_nr("https://lopezobrador.org.mx/version-estenografica-de-la-conferencia-de-prensa-matutina-del-presidente-andres-manuel-lopez-obrador-10/")
+```
+
+
+## 2 control mechanism: validate title of the page
+
+The validate function returns TRUE only when the requested speech has a title that contains morning speech (*prensa matutina*).
+To do this the function needs the parsed page source as an input. Then the title can be extracted with a xpath expression. The retrieved title will be be compared with the standard title:
+"*Versión estenográfica de la conferencia de prensa matutina del presidente Andrés Manuel López Obrador*" 
+
+The comparison is done by the grep function. This step is required in order to match slight variations in the title as well. For example there are some speech title that also contain the location of the morning speech. The grep function is executed in within the return so that a Boolean will be returned imminently 
+
+```{r}
+validate <- function(speech_url)
+{
+  page_title <- ""
+  try
+  {
+    node <- html_nodes(speech_url, xpath = '/html/body/div[3]/div/div/div[1]/div/article/h1')
+    page_title <- html_text(node)
+  }
+  target <- "Versión estenográfica de la conferencia de prensa matutina del presidente Andrés Manuel López Obrador"
+  return(grepl( target, page_title, fixed = TRUE) )
+}
+```
+
+Example with a special case in speech 120.
+We can see that the title also contain the city *Nayarit* where the speech took place.
+```{r}
+url_120 <- "https://lopezobrador.org.mx/2019/07/12/version-estenografica-de-la-conferencia-de-prensa-matutina-del-presidente-andres-manuel-lopez-obrador-120/"
+
+speech_url <- session(url_120,headers) %>%
+    read_html(url_list)
+
+
+node <- html_nodes(speech_url, xpath = '/html/body/div[3]/div/div/div[1]/div/article/h1')
+
+html_text(node)
+```
+
+The validate will also identify that the title refers to a morning speech and thus returns a true.
+```{r}
+validate(speech_url)
+```
+
+
+# The scraping 
+
+Once we can be sure that our url is leading us to desired morning speech as planed the actual scraping of the content is rather simple. The xpath '//p' is sufficient. 
+
+The xpath for the date is more complex. Also scraped date is in spanish and required a conversion before it is further processed.
+
+1. The for loop iterates over the previously created list urls.
+
+2. Each url will be parsed
+
+3. Then the number in the speech url is compared against the number from the redirected webpage which will be retrieved by the speech_nr function. If the numbers are the same, the if statement receives a true and the flow continues. 
+
+4. Next, the title of the parsed page will be validated by the validate function. 
+
+5. Once both validations are passed, the date will be extracted and converted.
+
+6. Then, the file directory will be check for files with the preliminary file name. If there isn't such a file, the speech extraction can start.
+
+7. The speech will be extracted
+
+8. The speech will be stored in a .txt will with number and date in the file name.
+
+```{r}
+for (i in 1:length(url_list)){
+  
+  speech_url <- session(url_list[i],headers) %>%
+    read_html(url_list)
+  
+  if(speech_nr(url_list[i]) == seq[i] ){
+    if(validate(speech_url)){
+      parsed_date <- html_nodes(speech_url, xpath = '//*[contains(concat( " ", @class, " " ), concat( " ", "entry-date", " " ))]')
+      date <- html_text(parsed_date)%>%
+        parse_date("%B %d, %Y", locale = locale("es"))
+      if (!file.exists(paste0(folder,date," no. ", seq[i]))) {
+        parsed_speech <- html_nodes(speech_url, xpath = '//p')
+        speech <- html_text(parsed_speech)
+        write(speech, file = paste0(folder,date," no. ", seq[i],".txt"))
+      }
+    }
+  }
+  # a timer for polite scraping
+  Sys.sleep(runif(1, 1, 2)) 
+}
+
+```
+
+The sample files are now save to scraped folder in the files directory
+
+
+<br>

@@ -74,7 +74,7 @@ for (i in 1:length(url_list)){
       }
     }
   }
-  # A timer for polite scrping (still needs to be set)  
+  # a timer for polite scrping 
   Sys.sleep(runif(1, 1, 2)) 
 }
 
